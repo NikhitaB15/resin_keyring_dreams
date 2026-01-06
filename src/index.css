@@ -1,0 +1,294 @@
+:root {
+  --primary: #E7A1B0;
+  /* Soft Rose / Dusty Pink - buttons, highlights */
+  --secondary: #F6C1CC;
+  /* Blush Pink - background sections */
+  --accent: #C9A24D;
+  /* Rose Gold / Warm Gold - icons, borders, CTA */
+  --bg: #FFF7F2;
+  /* Ivory / Off-White - main background */
+  --surface: #ffffff;
+  --text: #5a4a4a;
+  /* Warm charcoal for better contrast */
+  --text-light: #9a8a8a;
+  /* Lighter warm gray */
+
+  --glass: rgba(255, 247, 242, 0.85);
+  --glass-border: rgba(231, 161, 176, 0.2);
+  --shadow: 0 10px 40px -10px rgba(231, 161, 176, 0.15);
+  --radius: 4px;
+  /* Less rounded, more like cardstock */
+
+  --font-main: 'Cormorant Garamond', serif;
+  /* Elegant Serif */
+  --font-accent: 'Great Vibes', cursive;
+  /* Handwritten Script */
+  --font-ui: 'Montserrat', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Great Vibes&family=Montserrat:wght@300;400;500&display=swap');
+
+body {
+  background-color: var(--bg);
+  /* Subtle gradient overlay with blush pink and rose gold tones */
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(246, 193, 204, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(201, 162, 77, 0.08) 0%, transparent 40%);
+  color: var(--text);
+  font-family: var(--font-main);
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-main);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-top: 0;
+}
+
+h1 {
+  font-family: var(--font-accent);
+  font-size: 3.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+/* Utilities */
+.glass-panel {
+  background: var(--surface);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  /* Paper-like effect */
+  position: relative;
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.01);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.btn {
+  background: var(--text);
+  color: var(--surface);
+  border: 1px solid var(--text);
+  padding: 0.8rem 2rem;
+  border-radius: 0;
+  /* Boxy/Artistic */
+  cursor: pointer;
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  transition: all 0.4s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--text-light);
+  color: var(--text-light);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Form Styles */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-bottom: 2px solid #e0e0e0;
+  border-radius: 0;
+  background: #fff;
+  font-family: var(--font-ui);
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-bottom-color: var(--primary);
+}
+
+/* Badge for Sales */
+.sale-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--accent);
+  color: white;
+  padding: 2px 8px;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 10;
+}
+
+/* Navigation Link Hover Effects */
+nav a:not(.btn):not(.btn-icon) {
+  position: relative;
+  color: var(--text);
+}
+
+nav a:not(.btn):not(.btn-icon)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+nav a:not(.btn):not(.btn-icon):hover::after,
+nav a:not(.btn):not(.btn-icon).active::after {
+  width: 100%;
+}
+
+nav a:not(.btn):not(.btn-icon):hover {
+  color: var(--primary);
+}
+
+/* Smooth Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced card hover effects */
+.glass-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px -15px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+/* Icon button styles */
+.btn-icon {
+  transition: transform 0.2s ease;
+}
+
+.btn-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
