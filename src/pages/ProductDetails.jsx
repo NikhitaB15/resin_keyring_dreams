@@ -48,13 +48,11 @@ export const ProductDetails = () => {
 
             <div className="glass-panel" style={{ padding: '2rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 <div style={{ flex: '1 1 400px' }}>
-                    <div style={{ flex: '1 1 400px' }}>
-                        <ImageWithLoader
-                            src={product.image}
-                            alt={product.title}
-                            style={{ width: '100%', borderRadius: '16px', boxShadow: 'var(--shadow)', aspectRatio: '1/1' }}
-                        />
-                    </div>
+                    <ImageWithLoader
+                        src={product.image}
+                        alt={product.title}
+                        style={{ width: '100%', borderRadius: '16px', boxShadow: 'var(--shadow)', aspectRatio: '1/1' }}
+                    />
                 </div>
 
                 <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column' }}>

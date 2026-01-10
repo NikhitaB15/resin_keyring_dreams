@@ -103,8 +103,6 @@ const CartSidebar = () => {
                     ) : (
                         cart.map(item => (
                             <div key={item.id} style={{ display: 'flex', gap: '1rem', alignItems: 'start' }}>
-                                import ImageWithLoader from './ImageWithLoader';
-                                // ...
                                 <div style={{ width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
                                     <ImageWithLoader src={item.image} alt={item.title} style={{ width: '100%', height: '100%' }} />
                                 </div>
