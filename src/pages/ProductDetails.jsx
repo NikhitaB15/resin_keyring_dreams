@@ -61,7 +61,7 @@ export const ProductDetails = () => {
                     </span>
                     <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{product.title}</h1>
 
-                    <h2 style={{ color: 'var(--primary)', marginBottom: '2rem' }}>${parseFloat(product.price).toFixed(2)}</h2>
+                    <h2 style={{ color: 'var(--primary)', marginBottom: '2rem' }}>₹{parseFloat(product.price).toFixed(2)}</h2>
 
                     <p style={{ lineHeight: '1.8', marginBottom: '3rem', fontSize: '1.1rem', opacity: 0.9 }}>
                         {product.description}

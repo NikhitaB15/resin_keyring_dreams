@@ -145,14 +145,23 @@ const CartSidebar = () => {
                 </div>
 
                 {/* Footer */}
+                {/* Footer */}
                 {cart.length > 0 && (
                     <div style={{ padding: '1.5rem', background: 'var(--bg)', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 600 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '1rem', color: 'var(--text-light)' }}>
                             <span>Subtotal</span>
                             <span>₹{cartTotal.toFixed(2)}</span>
                         </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1rem', color: 'var(--text-light)' }}>
+                            <span>DTDC Standard Shipping</span>
+                            <span>₹{cartTotal > 999 ? '0.00' : '80.00'}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 600 }}>
+                            <span>Total</span>
+                            <span>₹{(cartTotal + (cartTotal > 999 ? 0 : 80)).toFixed(2)}</span>
+                        </div>
                         <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', textAlign: 'center', marginBottom: '1rem' }}>
-                            Shipping and taxes calculated at checkout.
+                            {cartTotal > 999 ? 'Free shipping applied!' : 'Add items worth ₹' + (1000 - cartTotal).toFixed(0) + ' more for free shipping.'}
                         </p>
                         <button onClick={handleCheckout} className="btn" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }}>
                             Checkout Now
