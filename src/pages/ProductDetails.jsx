@@ -32,7 +32,7 @@ export const ProductDetails = () => {
                 <ArrowLeft size={20} /> Back to Shop
             </Link>
 
-            <div className="glass-panel" style={{ padding: '3rem', display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
+            <div className="glass-panel" style={{ padding: '2rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 <div style={{ flex: '1 1 400px' }}>
                     <img
                         src={product.image}

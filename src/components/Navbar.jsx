@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
-import { Heart, User, ShoppingBag, LogOut } from 'lucide-react';
+import { Heart, User, ShoppingBag, LogOut, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
     const { wishlist, isAdmin, logoutAdmin } = useStore();
     const location = useLocation();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const isActive = (path) => location.pathname === path ? 'active' : '';
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location.pathname]);
 
     return (
         <nav style={{
@@ -21,7 +27,7 @@ const Navbar = () => {
             WebkitBackdropFilter: 'blur(20px)',
             borderBottom: '1px solid rgba(246, 193, 204, 0.2)',
             boxShadow: '0 4px 20px rgba(231, 161, 176, 0.08)',
-            padding: '1.2rem 3rem',
+            padding: '1rem 5%', // Responsive padding
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
@@ -42,7 +48,8 @@ const Navbar = () => {
                 <span style={{ fontSize: '1.8rem' }}>✨</span> Resin Dreams
             </Link>
 
-            <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
+            {/* Desktop Navigation */}
+            <div className="nav-links-desktop">
                 <Link to="/" className={isActive('/')} style={{
                     fontFamily: 'var(--font-ui)',
                     fontWeight: 500,
@@ -102,6 +109,40 @@ const Navbar = () => {
                     <Link to="/login" title="Admin Login">
                         <User size={24} />
                     </Link>
+                )}
+
+                {/* Mobile Menu Toggle */}
+                <button
+                    className="mobile-menu-toggle"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
+            {/* Mobile Menu Dropdown */}
+            <div className={`mobile-menu-container ${isMenuOpen ? 'open' : ''}`}>
+                <Link to="/" className={isActive('/')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.5px'
+                }}>Home</Link>
+                <Link to="/shop" className={isActive('/shop')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.5px'
+                }}>Shop</Link>
+                {isAdmin && (
+                    <Link to="/admin" className={isActive('/admin')} style={{
+                        fontFamily: 'var(--font-ui)',
+                        fontWeight: 500,
+                        fontSize: '1.1rem',
+                        letterSpacing: '0.5px',
+                        color: 'var(--primary)'
+                    }}>Dashboard</Link>
                 )}
             </div>
         </nav>
