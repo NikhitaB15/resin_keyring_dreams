@@ -13,11 +13,13 @@ const ProtectedRoute = ({ children }) => {
 };
 
 import Toast from './components/Toast';
+import CartSidebar from './components/CartSidebar';
 
 function App() {
   return (
     <>
       <Toast />
+      <CartSidebar />
       <Navbar />
       <div style={{ paddingBottom: '4rem' }}>
         <Routes>

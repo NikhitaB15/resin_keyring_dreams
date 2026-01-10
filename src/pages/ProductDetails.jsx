@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { Heart, ArrowLeft, ShoppingBag } from 'lucide-react';
+import RelatedProducts from '../components/RelatedProducts';
+import ImageWithLoader from '../components/ImageWithLoader';
+
+
 
 export const ProductDetails = () => {
     const { id } = useParams();
-    const { products, toggleWishlist, wishlist, trackProductView, showToast } = useStore();
+    const { products, toggleWishlist, wishlist, trackProductView, addToCart } = useStore();
 
     const product = products.find(p => p.id === parseInt(id) || p.id === id);
     const isWishlisted = product ? wishlist.includes(product.id) : false;
@@ -24,7 +28,7 @@ export const ProductDetails = () => {
     };
 
     const handleAddToCart = () => {
-        showToast('Added to Cart! (Demo)', 'success');
+        addToCart(product);
     }
 
     if (!product) {
@@ -44,11 +48,13 @@ export const ProductDetails = () => {
 
             <div className="glass-panel" style={{ padding: '2rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 <div style={{ flex: '1 1 400px' }}>
-                    <img
-                        src={product.image}
-                        alt={product.title}
-                        style={{ width: '100%', borderRadius: '16px', boxShadow: 'var(--shadow)' }}
-                    />
+                    <div style={{ flex: '1 1 400px' }}>
+                        <ImageWithLoader
+                            src={product.image}
+                            alt={product.title}
+                            style={{ width: '100%', borderRadius: '16px', boxShadow: 'var(--shadow)', aspectRatio: '1/1' }}
+                        />
+                    </div>
                 </div>
 
                 <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column' }}>
@@ -65,7 +71,7 @@ export const ProductDetails = () => {
 
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <button onClick={handleAddToCart} className="btn" style={{ flex: 1, fontSize: '1.1rem', justifyContent: 'center' }}>
-                            <ShoppingBag size={20} style={{ marginRight: '0.5rem' }} /> Add to Cart (Demo)
+                            <ShoppingBag size={20} style={{ marginRight: '0.5rem' }} /> Add to Cart
                         </button>
                         <button
                             onClick={handleWishlist}
@@ -77,6 +83,8 @@ export const ProductDetails = () => {
                     </div>
                 </div>
             </div>
+
+            <RelatedProducts currentProduct={product} />
         </div>
     );
 };

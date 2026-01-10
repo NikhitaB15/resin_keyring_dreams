@@ -4,7 +4,7 @@ import { useStore } from '../context/StoreContext';
 import { Heart, User, ShoppingBag, LogOut, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
-    const { wishlist, isAdmin, logoutAdmin } = useStore();
+    const { wishlist, isAdmin, logoutAdmin, cart, setIsCartOpen } = useStore();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -100,6 +100,30 @@ const Navbar = () => {
                         }}>{wishlist.length}</span>
                     )}
                 </Link>
+
+                <button
+                    className="btn-icon"
+                    onClick={() => setIsCartOpen(true)}
+                    style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'inherit' }}
+                >
+                    <ShoppingBag size={24} />
+                    {cart.length > 0 && (
+                        <span style={{
+                            position: 'absolute',
+                            top: '-8px',
+                            right: '-8px',
+                            background: 'var(--accent)',
+                            color: '#fff',
+                            fontSize: '0.7rem',
+                            width: '18px',
+                            height: '18px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>{cart.length}</span>
+                    )}
+                </button>
 
                 {isAdmin ? (
                     <button onClick={logoutAdmin} className="btn-secondary" style={{ padding: '0.5rem' }} title="Logout">

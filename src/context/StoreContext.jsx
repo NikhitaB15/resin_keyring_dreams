@@ -117,6 +117,13 @@ export const StoreProvider = ({ children }) => {
     };
   });
 
+  // Cart State
+  const [cart, setCart] = useState(() => {
+    const saved = localStorage.getItem('cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   // Toast State
   const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
 
@@ -127,6 +134,11 @@ export const StoreProvider = ({ children }) => {
   const hideToast = () => {
     setToast(prev => ({ ...prev, show: false }));
   };
+
+  // Persistence Effects
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   // Persistence Effects
   useEffect(() => {
@@ -243,6 +255,39 @@ export const StoreProvider = ({ children }) => {
     return products.filter(p => wishlist.includes(p.id));
   };
 
+  // Cart Actions
+  const addToCart = (product) => {
+    setCart(prev => {
+      const existingItem = prev.find(item => item.id === product.id);
+      if (existingItem) {
+        showToast(`Increased ${product.title} quantity`, 'success');
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      showToast('Added to Cart', 'success');
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    setIsCartOpen(true);
+  };
+
+  const removeFromCart = (productId) => {
+    setCart(prev => prev.filter(item => item.id !== productId));
+    showToast('Removed from Cart', 'info');
+  };
+
+  const updateQuantity = (productId, delta) => {
+    setCart(prev => prev.map(item => {
+      if (item.id === productId) {
+        const newQuantity = Math.max(1, item.quantity + delta);
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    }));
+  };
+
+  const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
   return (
     <StoreContext.Provider value={{
       products,
@@ -262,6 +307,13 @@ export const StoreProvider = ({ children }) => {
       trackProductView,
       getAnalytics,
       analytics,
+      cart,
+      isCartOpen,
+      setIsCartOpen,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      cartTotal,
       toast,
       showToast,
       hideToast
