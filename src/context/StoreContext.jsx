@@ -11,7 +11,7 @@ const DEFAULT_PRODUCTS = [
     id: 1,
     title: 'Blush Floral Keyring',
     price: 120.00,
-    originalPrice: 200.00,
+    originalPrice: 150.00,
     category: 'Keyrings',
     image: '/products/keyring_floral.jpg',
     description: 'Handcrafted oval keyring with delicate pink florals and gold shimmering touches.'
@@ -20,6 +20,7 @@ const DEFAULT_PRODUCTS = [
     id: 2,
     title: 'Midnight Blue Hydrangea Earrings',
     price: 150.00,
+    originalPrice: 200.00,
     category: 'Earrings',
     image: '/products/earrings_blue.jpg',
     description: 'Rectangular blue resin earrings featuring real hydrangea petals.'
@@ -47,6 +48,41 @@ const DEFAULT_PRODUCTS = [
     category: 'Earrings',
     image: '/products/earrings_rose_2.jpg',
     description: 'Golden hour inspired dangles with scattered petals.'
+  },
+  {
+    id: 6,
+    title: 'Beach Keyring',
+    price: 130.00,
+    originalPrice: 180.00,
+    category: 'Keyrings',
+    image: '/products/beach_keyring.png',
+    description: 'Ocean-inspired keyring with beach elements preserved in crystal-clear resin.'
+  },
+  {
+    id: 7,
+    title: 'Pink Rose Oval Earrings',
+    price: 125.00,
+    originalPrice: 175.00,
+    category: 'Earrings',
+    image: '/products/big_rose_earrings.jpg',
+    description: 'Elegant oval-shaped earrings featuring delicate pink rose petals and floral accents.'
+  },
+  {
+    id: 8,
+    title: 'Floral Dreams Keyring',
+    price: 135.00,
+    originalPrice: 190.00,
+    category: 'Keyrings',
+    image: '/products/flower_keyring.jpg',
+    description: 'Rectangular keyring adorned with painted pink and purple flowers on a soft background.'
+  },
+  {
+    id: 9,
+    title: 'Heartbreak Studs',
+    price: 110.00,
+    category: 'Earrings',
+    image: '/products/heart_broken.jpg',
+    description: 'Heart-shaped pink resin studs with artistic red and white patterns, perfect for Valentine\'s.'
   }
 ];
 
