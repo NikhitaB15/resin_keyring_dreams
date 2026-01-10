@@ -135,6 +135,78 @@ export const StoreProvider = ({ children }) => {
     setToast(prev => ({ ...prev, show: false }));
   };
 
+  // Location & Shipping State
+  const [shippingData, setShippingData] = useState({
+    pincode: '',
+    city: '',
+    loading: false,
+    shippingCost: 0
+  });
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) {
+      showToast('Geolocation is not supported by your browser', 'error');
+      return;
+    }
+
+    setShippingData(prev => ({ ...prev, loading: true }));
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+          );
+          const data = await response.json();
+
+          // Basic logic to mimic "Official Data" - normally you'd use a real shipping API here
+          const detectedPin = data.postcode || '';
+
+          setShippingData({
+            pincode: detectedPin,
+            city: data.city || data.locality || '',
+            loading: false,
+            shippingCost: calculateShipping(detectedPin)
+          });
+
+          showToast(`Location detected: ${data.city || 'Unknown'}`, 'success');
+        } catch (error) {
+          console.error('Error fetching location:', error);
+          setShippingData(prev => ({ ...prev, loading: false }));
+          showToast('Failed to fetch address details', 'error');
+        }
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        setShippingData(prev => ({ ...prev, loading: false }));
+        showToast('Location access denied. Please enter manually.', 'info');
+      }
+    );
+  };
+
+  const calculateShipping = (pincode) => {
+    // Mimic official DTDC/Shipping logic
+    // 1. Valid Indian Pincodes are 6 digits
+    if (!pincode || pincode.length !== 6) return 0;
+
+    // 2. Metro Cities often start with 11 (Delhi), 40 (Mumbai), 56 (Bangalore), 60 (Chennai), 70 (Kolkata)
+    const metroPrefixes = ['11', '40', '56', '60', '70'];
+    const isMetro = metroPrefixes.some(prefix => pincode.startsWith(prefix));
+
+    // Base Rates
+    if (isMetro) return 60; // Cheaper for metros
+    return 80; // Standard for others
+  };
+
+  const updatePincode = (newPincode) => {
+    setShippingData(prev => ({
+      ...prev,
+      pincode: newPincode,
+      shippingCost: calculateShipping(newPincode)
+    }));
+  };
+
   // Persistence Effects
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -316,7 +388,12 @@ export const StoreProvider = ({ children }) => {
       cartTotal,
       toast,
       showToast,
-      hideToast
+      toast,
+      showToast,
+      hideToast,
+      shippingData,
+      detectLocation,
+      updatePincode
     }}>
       {children}
     </StoreContext.Provider>

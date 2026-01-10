@@ -13,7 +13,10 @@ const CartSidebar = () => {
         removeFromCart,
         updateQuantity,
         cartTotal,
-        showToast
+        showToast,
+        shippingData,
+        detectLocation,
+        updatePincode
     } = useStore();
 
     const sidebarRef = useRef(null);
@@ -148,17 +151,48 @@ const CartSidebar = () => {
                 {/* Footer */}
                 {cart.length > 0 && (
                     <div style={{ padding: '1.5rem', background: 'var(--bg)', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+
+                        {/* Shipping Calculator */}
+                        <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'white', borderRadius: '8px', border: '1px solid #eee' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text)' }}>Shipping Estimate</label>
+                                <button
+                                    onClick={detectLocation}
+                                    style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                >
+                                    {shippingData.loading ? 'Detecting...' : '📍 Detect Location'}
+                                </button>
+                            </div>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <input
+                                    type="text"
+                                    placeholder="Enter Pincode"
+                                    value={shippingData.pincode}
+                                    onChange={(e) => updatePincode(e.target.value)}
+                                    maxLength={6}
+                                    style={{ margin: 0, padding: '0.5rem', fontSize: '0.9rem' }}
+                                />
+                            </div>
+                            {shippingData.city && (
+                                <p style={{ fontSize: '0.8rem', color: 'green', margin: '0.5rem 0 0' }}>Delivering to: {shippingData.city}</p>
+                            )}
+                        </div>
+
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '1rem', color: 'var(--text-light)' }}>
                             <span>Subtotal</span>
                             <span>₹{cartTotal.toFixed(2)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1rem', color: 'var(--text-light)' }}>
-                            <span>DTDC Standard Shipping</span>
-                            <span>₹{cartTotal > 999 ? '0.00' : '80.00'}</span>
+                            <span>Shipping {shippingData.pincode ? `(${shippingData.shippingCost === 60 ? 'Metro' : 'Standard'})` : ''}</span>
+                            <span>
+                                {cartTotal > 999
+                                    ? <span style={{ color: 'green' }}>FREE</span>
+                                    : (shippingData.pincode ? `₹${shippingData.shippingCost.toFixed(2)}` : 'Enter Pincode')}
+                            </span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 600 }}>
                             <span>Total</span>
-                            <span>₹{(cartTotal + (cartTotal > 999 ? 0 : 80)).toFixed(2)}</span>
+                            <span>₹{(cartTotal + (cartTotal > 999 ? 0 : (shippingData.pincode ? shippingData.shippingCost : 0))).toFixed(2)}</span>
                         </div>
                         <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', textAlign: 'center', marginBottom: '1rem' }}>
                             {cartTotal > 999 ? 'Free shipping applied!' : 'Add items worth ₹' + (1000 - cartTotal).toFixed(0) + ' more for free shipping.'}
