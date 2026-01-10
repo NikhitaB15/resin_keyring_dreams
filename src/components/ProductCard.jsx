@@ -4,8 +4,14 @@ import { useStore } from '../context/StoreContext';
 import { Heart } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
-    const { wishlist, toggleWishlist } = useStore();
+    const { wishlist, toggleWishlist, showToast } = useStore();
     const isWishlisted = wishlist.includes(product.id);
+
+    const handleWishlist = () => {
+        toggleWishlist(product.id);
+        const action = !isWishlisted ? 'Added to' : 'Removed from';
+        showToast(`${action} Wishlist`, !isWishlisted ? 'success' : 'info');
+    };
 
     return (
         <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', position: 'relative', transition: 'all 0.3s ease', display: 'flex', flexDirection: 'column' }}>
@@ -20,7 +26,7 @@ const ProductCard = ({ product }) => {
             </Link>
 
             <button
-                onClick={() => toggleWishlist(product.id)}
+                onClick={handleWishlist}
                 style={{
                     position: 'absolute',
                     top: '1rem',

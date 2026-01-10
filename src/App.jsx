@@ -12,9 +12,12 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+import Toast from './components/Toast';
+
 function App() {
   return (
     <>
+      <Toast />
       <Navbar />
       <div style={{ paddingBottom: '4rem' }}>
         <Routes>

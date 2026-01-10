@@ -117,6 +117,17 @@ export const StoreProvider = ({ children }) => {
     };
   });
 
+  // Toast State
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+
+  const showToast = (message, type = 'info') => {
+    setToast({ show: true, message, type });
+  };
+
+  const hideToast = () => {
+    setToast(prev => ({ ...prev, show: false }));
+  };
+
   // Persistence Effects
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));
@@ -250,7 +261,10 @@ export const StoreProvider = ({ children }) => {
       trackPageVisit,
       trackProductView,
       getAnalytics,
-      analytics
+      analytics,
+      toast,
+      showToast,
+      hideToast
     }}>
       {children}
     </StoreContext.Provider>

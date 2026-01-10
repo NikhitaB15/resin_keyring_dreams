@@ -5,7 +5,7 @@ import { Heart, ArrowLeft, ShoppingBag } from 'lucide-react';
 
 export const ProductDetails = () => {
     const { id } = useParams();
-    const { products, toggleWishlist, wishlist, trackProductView } = useStore();
+    const { products, toggleWishlist, wishlist, trackProductView, showToast } = useStore();
 
     const product = products.find(p => p.id === parseInt(id) || p.id === id);
     const isWishlisted = product ? wishlist.includes(product.id) : false;
@@ -16,6 +16,16 @@ export const ProductDetails = () => {
             trackProductView(product.id);
         }
     }, [product?.id]);
+
+    const handleWishlist = () => {
+        toggleWishlist(product.id);
+        const action = !isWishlisted ? 'Added to' : 'Removed from';
+        showToast(`${action} Wishlist`, !isWishlisted ? 'success' : 'info');
+    };
+
+    const handleAddToCart = () => {
+        showToast('Added to Cart! (Demo)', 'success');
+    }
 
     if (!product) {
         return (
@@ -54,11 +64,11 @@ export const ProductDetails = () => {
                     </p>
 
                     <div style={{ display: 'flex', gap: '1rem' }}>
-                        <button className="btn" style={{ flex: 1, fontSize: '1.1rem', justifyContent: 'center' }}>
+                        <button onClick={handleAddToCart} className="btn" style={{ flex: 1, fontSize: '1.1rem', justifyContent: 'center' }}>
                             <ShoppingBag size={20} style={{ marginRight: '0.5rem' }} /> Add to Cart (Demo)
                         </button>
                         <button
-                            onClick={() => toggleWishlist(product.id)}
+                            onClick={handleWishlist}
                             className="btn btn-secondary"
                             style={{ width: '60px', justifyContent: 'center', padding: '0', background: isWishlisted ? '#ffebeb' : 'transparent', borderColor: isWishlisted ? '#ff6b6b' : 'var(--text)' }}
                         >

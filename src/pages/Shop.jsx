@@ -3,19 +3,43 @@ import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
 
+import { Search } from 'lucide-react';
+
 export const Shop = () => {
     const { products, categories } = useStore();
     const [activeCategory, setActiveCategory] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredProducts = activeCategory === 'All'
-        ? products
-        : products.filter(p => p.category === activeCategory);
+    const filteredProducts = products.filter(p => {
+        const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
+        const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
     return (
         <>
             <div className="container" style={{ margin: '4rem auto' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '3rem' }}>
                     <h1 style={{ marginBottom: '2rem' }}>Our Collection</h1>
+
+                    {/* Search Bar */}
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '500px', marginBottom: '2rem' }}>
+                        <Search size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }} />
+                        <input
+                            type="text"
+                            placeholder="Search for keyrings, earrings..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{
+                                paddingLeft: '3rem',
+                                marginBottom: 0,
+                                borderRadius: '50px',
+                                background: 'white',
+                                boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+                            }}
+                        />
+                    </div>
 
                     {/* Category Filters */}
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -46,7 +70,7 @@ export const Shop = () => {
 
                 {filteredProducts.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '4rem', opacity: 0.6 }}>
-                        <h3>No products found in this category yet.</h3>
+                        <h3>No products found matching your criteria.</h3>
                     </div>
                 )}
             </div>
