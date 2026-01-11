@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Plus, Trash2, Edit2, GripVertical, X, Save, TrendingUp, Eye, Heart as HeartIcon, Users, Globe } from 'lucide-react';
+import { supabase } from '../supabaseClient';
 import Footer from '../components/Footer';
 
 export const Admin = () => {
@@ -375,12 +376,43 @@ export const Admin = () => {
                             </div>
 
                             <div style={{ marginBottom: '1rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Image Path</label>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Product Image</label>
                                 <input
-                                    value={newProduct.image}
-                                    onChange={e => setNewProduct({ ...newProduct, image: e.target.value })}
-                                    placeholder="/products/image.jpg"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const file = e.target.files[0];
+                                        if (!file) return;
+
+                                        try {
+                                            const fileExt = file.name.split('.').pop();
+                                            const fileName = `${Math.random()}.${fileExt}`;
+                                            const filePath = `${fileName}`;
+
+                                            // Upload to Supabase Storage
+                                            const { error: uploadError } = await supabase.storage
+                                                .from('product-images')
+                                                .upload(filePath, file);
+
+                                            if (uploadError) throw uploadError;
+
+                                            // Get Public URL
+                                            const { data: { publicUrl } } = supabase.storage
+                                                .from('product-images')
+                                                .getPublicUrl(filePath);
+
+                                            setNewProduct({ ...newProduct, image: publicUrl });
+                                            alert('Image Uploaded! 📸');
+                                        } catch (error) {
+                                            console.error('Error uploading image:', error);
+                                            alert('Upload failed!');
+                                        }
+                                    }}
+                                    style={{ marginBottom: '0.5rem' }}
                                 />
+                                {newProduct.image && (
+                                    <img src={newProduct.image} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #ddd' }} />
+                                )}
                             </div>
 
                             <div style={{ marginBottom: '1rem' }}>
@@ -490,11 +522,30 @@ export const Admin = () => {
                                 {editingProduct === product.id ? (
                                     // Edit Mode
                                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 2fr', gap: '0.5rem', alignItems: 'center' }}>
-                                        <input
-                                            value={editForm.title}
-                                            onChange={e => setEditForm({ ...editForm, title: e.target.value })}
-                                            style={{ marginBottom: 0, padding: '0.5rem' }}
-                                        />
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <input
+                                                value={editForm.title}
+                                                onChange={e => setEditForm({ ...editForm, title: e.target.value })}
+                                                style={{ marginBottom: 0, padding: '0.5rem' }}
+                                            />
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                style={{ fontSize: '0.8rem' }}
+                                                onChange={async (e) => {
+                                                    const file = e.target.files[0];
+                                                    if (!file) return;
+                                                    try {
+                                                        const fileExt = file.name.split('.').pop();
+                                                        const fileName = `${Math.random()}.${fileExt}`;
+                                                        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, file);
+                                                        if (uploadError) throw uploadError;
+                                                        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+                                                        setEditForm({ ...editForm, image: publicUrl });
+                                                    } catch (error) { console.error('Upload failed', error); }
+                                                }}
+                                            />
+                                        </div>
                                         <input
                                             type="number"
                                             value={editForm.price}

@@ -197,8 +197,15 @@ const CartSidebar = () => {
                         <p style={{ fontSize: '0.8rem', color: 'var(--text-light)', textAlign: 'center', marginBottom: '1rem' }}>
                             {cartTotal > 999 ? 'Free shipping applied!' : 'Add items worth ₹' + (1000 - cartTotal).toFixed(0) + ' more for free shipping.'}
                         </p>
-                        <button onClick={handleCheckout} className="btn" style={{ width: '100%', justifyContent: 'center', padding: '1rem' }}>
-                            Checkout Now
+                        <button
+                            onClick={() => {
+                                const message = `Hi! I'd like to order: \n` + cart.map(item => `- ${item.quantity}x ${item.title} (₹${item.price})`).join('\n') + `\n\nTotal: ₹${(cartTotal + (cartTotal > 999 ? 0 : (shippingData.pincode ? shippingData.shippingCost : 0))).toFixed(2)}`;
+                                window.open(`https://ig.me/m/your_instagram_handle?text=${encodeURIComponent(message)}`, '_blank');
+                            }}
+                            className="btn"
+                            style={{ width: '100%', justifyContent: 'center', padding: '1rem', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', border: 'none' }}
+                        >
+                            Order via Instagram
                         </button>
                     </div>
                 )}
