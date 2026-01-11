@@ -7,9 +7,36 @@ import Footer from '../components/Footer';
 import { Search } from 'lucide-react';
 
 export const Shop = () => {
-    const { products, categories } = useStore();
+    const { products, categories, loading } = useStore();
     const [searchParams, setSearchParams] = useSearchParams();
     const activeCategory = searchParams.get('category') || 'All';
+    const [searchQuery, setSearchQuery] = useState('');
+
+    if (loading) {
+        return (
+            <>
+                <div className="container" style={{ margin: '4rem auto', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="pulsing-heart">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="var(--primary)" stroke="none">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <p style={{ marginTop: '1.5rem', fontFamily: 'var(--font-accent)', fontSize: '1.8rem', color: 'var(--primary)', letterSpacing: '1px' }}>Polishing the resin...</p>
+                    <style>{`
+                        .pulsing-heart {
+                            animation: heartbeat 1.5s ease-in-out infinite both;
+                        }
+                        @keyframes heartbeat {
+                            0% { transform: scale(1); opacity: 1; }
+                            50% { transform: scale(1.2); opacity: 0.8; }
+                            100% { transform: scale(1); opacity: 1; }
+                        }
+                    `}</style>
+                </div>
+                <Footer />
+            </>
+        );
+    }
 
     const handleCategoryChange = (category) => {
         if (category === 'All') {
@@ -19,7 +46,6 @@ export const Shop = () => {
             setSearchParams({ category });
         }
     };
-    const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProducts = products.filter(p => {
         // Parse tags: if it's a string (from DB/CSV), split it. If array, use as is.
