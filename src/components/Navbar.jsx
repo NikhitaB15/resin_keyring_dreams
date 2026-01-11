@@ -8,7 +8,19 @@ const Navbar = () => {
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const isActive = (path) => location.pathname === path ? 'active' : '';
+    const isActive = (path) => {
+        const currentPath = location.pathname + decodeURIComponent(location.search);
+        // If the link has a query param, exact match including query
+        if (path.includes('?')) {
+            return currentPath === path ? 'active' : '';
+        }
+        // Otherwise, match just the pathname (for Home, Shop main page, etc)
+        // Ensure we don't match '/shop' when we are actually at '/shop?category=...' unless it's strictly intended.
+        // But for standard nav behavior, usually highlighting 'Shop' is fine if we are in a sub-category.
+        // However, the user specifically wants the sub-links to work.
+        // So let's do exact match for simplicity or check if it starts with checking strict equality
+        return location.pathname === path && location.search === '' ? 'active' : '';
+    };
 
     // Close menu when route changes
     useEffect(() => {

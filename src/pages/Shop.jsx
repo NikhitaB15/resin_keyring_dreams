@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
@@ -9,27 +9,16 @@ import { Search } from 'lucide-react';
 export const Shop = () => {
     const { products, categories } = useStore();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
+    const activeCategory = searchParams.get('category') || 'All';
 
-    // Update URL when category changes
-    useEffect(() => {
-        if (activeCategory === 'All') {
+    const handleCategoryChange = (category) => {
+        if (category === 'All') {
             searchParams.delete('category');
+            setSearchParams(searchParams);
         } else {
-            searchParams.set('category', activeCategory);
+            setSearchParams({ category });
         }
-        setSearchParams(searchParams);
-    }, [activeCategory, setSearchParams]);
-
-    // Update state when URL changes (e.g. back button)
-    useEffect(() => {
-        const category = searchParams.get('category');
-        if (category && category !== activeCategory) {
-            setActiveCategory(category);
-        } else if (!category && activeCategory !== 'All') {
-            setActiveCategory('All');
-        }
-    }, [searchParams]);
+    };
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProducts = products.filter(p => {
@@ -67,7 +56,7 @@ export const Shop = () => {
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                         <button
                             className={`btn ${activeCategory === 'All' ? '' : 'btn-secondary'}`}
-                            onClick={() => setActiveCategory('All')}
+                            onClick={() => handleCategoryChange('All')}
                         >
                             All
                         </button>
@@ -75,7 +64,7 @@ export const Shop = () => {
                             <button
                                 key={cat}
                                 className={`btn ${activeCategory === cat ? '' : 'btn-secondary'}`}
-                                onClick={() => setActiveCategory(cat)}
+                                onClick={() => handleCategoryChange(cat)}
                             >
                                 {cat}
                             </button>
