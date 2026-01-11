@@ -427,8 +427,6 @@ export const StoreProvider = ({ children }) => {
       cartTotal,
       toast,
       showToast,
-      toast,
-      showToast,
       hideToast,
       shippingData,
       detectLocation,

@@ -22,7 +22,18 @@ export const Shop = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProducts = products.filter(p => {
-        const productTags = p.tags || [];
+        // Parse tags: if it's a string (from DB/CSV), split it. If array, use as is.
+        let productTags = [];
+        if (Array.isArray(p.tags)) {
+            productTags = p.tags;
+        } else if (typeof p.tags === 'string') {
+            // Remove { } or [ ] if present (common Supabase format artifacts) and clean quotes
+            const cleanTags = p.tags.replace(/[{}"\[\]]/g, '');
+            productTags = cleanTags.split(',').map(t => t.trim()).filter(Boolean);
+        }
+
+        console.log(`Product: ${p.title}, Category: ${p.category}, Tags:`, productTags); // Debugging
+
         const matchesCategory = activeCategory === 'All' ||
             p.category === activeCategory ||
             productTags.includes(activeCategory);
