@@ -1,106 +1,48 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
+import { supabase } from '../supabaseClient';
+
 const StoreContext = createContext();
 
 export const useStore = () => useContext(StoreContext);
 
 const DEFAULT_CATEGORIES = ['Keyrings', 'Earrings', 'Necklaces', 'Sets', 'Valentine\'s Day', 'Beach'];
 
-const DEFAULT_PRODUCTS = [
-  {
-    id: 1,
-    title: 'Blush Floral Keyring',
-    price: 120.00,
-    originalPrice: 150.00,
-    category: 'Keyrings',
-    tags: [],
-    image: '/products/keyring_floral.jpg',
-    description: 'Handcrafted oval keyring with delicate pink florals and gold shimmering touches.'
-  },
-  {
-    id: 2,
-    title: 'Midnight Blue Hydrangea Earrings',
-    price: 150.00,
-    originalPrice: 200.00,
-    category: 'Earrings',
-    tags: [],
-    image: '/products/earrings_blue.jpg',
-    description: 'Rectangular blue resin earrings featuring real hydrangea petals.'
-  },
-  {
-    id: 3,
-    title: 'Rose Petal Dangles',
-    price: 100.00,
-    category: 'Earrings',
-    tags: ['Valentine\'s Day'],
-    image: '/products/earrings_rose_1.jpg',
-    description: 'Circular resin drops filled with vibrant rose petals and gold foil.'
-  },
-  {
-    id: 4,
-    title: 'Emerald Leaf Squares',
-    price: 115.00,
-    category: 'Earrings',
-    tags: [],
-    image: '/products/earrings_green.jpg',
-    description: 'Square studs encapsulating fresh green leaves and glitter.'
-  },
-  {
-    id: 5,
-    title: 'Autumn Gold Drops',
-    price: 140.00,
-    category: 'Earrings',
-    tags: [],
-    image: '/products/earrings_rose_2.jpg',
-    description: 'Golden hour inspired dangles with scattered petals.'
-  },
-  {
-    id: 6,
-    title: 'Beach Keyring',
-    price: 130.00,
-    originalPrice: 180.00,
-    category: 'Keyrings',
-    tags: ['Beach'],
-    image: '/products/beach_keyring.png',
-    description: 'Ocean-inspired keyring with beach elements preserved in crystal-clear resin.'
-  },
-  {
-    id: 7,
-    title: 'Pink Rose Oval Earrings',
-    price: 125.00,
-    originalPrice: 175.00,
-    category: 'Earrings',
-    tags: ['Valentine\'s Day'],
-    image: '/products/big_rose_earrings.jpg',
-    description: 'Elegant oval-shaped earrings featuring delicate pink rose petals and floral accents.'
-  },
-  {
-    id: 8,
-    title: 'Floral Dreams Keyring',
-    price: 135.00,
-    originalPrice: 190.00,
-    category: 'Keyrings',
-    tags: [],
-    image: '/products/flower_keyring.jpg',
-    description: 'Rectangular keyring adorned with painted pink and purple flowers on a soft background.'
-  },
-  {
-    id: 9,
-    title: 'Heartbreak Studs',
-    price: 110.00,
-    category: 'Earrings',
-    tags: ['Valentine\'s Day'],
-    image: '/products/heart_broken.jpg',
-    description: 'Heart-shaped pink resin studs with artistic red and white patterns, perfect for Valentine\'s.'
-  }
-];
-
 export const StoreProvider = ({ children }) => {
-  // State initialization with localStorage checks
-  const [products, setProducts] = useState(() => {
-    const saved = localStorage.getItem('products');
-    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
-  });
+  // Products now come from Supabase or default empty array initially
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch Products from Supabase on Load
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setProducts(data);
+      } else {
+        // If DB is empty, maybe we want to use defaults? 
+        // For now, let's keep it empty or you can seed it manually.
+        setProducts([]);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error.message);
+      // Fallback to localStorage if Supabase fails? 
+      // For now, let's just log it.
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [categories, setCategories] = useState(() => {
     const saved = localStorage.getItem('categories');
@@ -255,9 +197,41 @@ export const StoreProvider = ({ children }) => {
   }, [analytics]);
 
   // Actions
-  const addProduct = (product) => {
-    const newProduct = { ...product, id: Date.now(), tags: product.tags || [] };
-    setProducts([...products, newProduct]);
+  const addProduct = async (product) => {
+    // Optimistic Update
+    const tempId = Date.now();
+    const newProduct = { ...product, id: tempId, tags: product.tags || [] }; // Store tags as array locally
+    setProducts([...products, newProduct]); // Show immediately
+
+    try {
+      // Prepare for DB
+      const dbProduct = {
+        title: product.title,
+        price: product.price,
+        original_price: product.originalPrice,
+        category: product.category,
+        image: product.image,
+        description: product.description
+      };
+
+      const { data, error } = await supabase
+        .from('products')
+        .insert([dbProduct])
+        .select();
+
+      if (error) throw error;
+
+      // Update with real ID from DB
+      if (data && data.length > 0) {
+        setProducts(prev => prev.map(p => p.id === tempId ? data[0] : p));
+        showToast('Product saved to database!', 'success');
+      }
+
+    } catch (error) {
+      console.error('Error adding product:', error);
+      showToast('Failed to save product to DB', 'error');
+      // Revert optimistic update?
+    }
   };
 
   const addCategory = (category) => {
@@ -266,20 +240,54 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  const updateProduct = (productId, updatedData) => {
+  const updateProduct = async (productId, updatedData) => {
     setProducts(products.map(p =>
       p.id === productId ? { ...p, ...updatedData } : p
     ));
+
+    try {
+      const dbUpdate = {};
+      if (updatedData.title) dbUpdate.title = updatedData.title;
+      if (updatedData.price) dbUpdate.price = updatedData.price;
+      if (updatedData.originalPrice) dbUpdate.original_price = updatedData.originalPrice;
+      if (updatedData.category) dbUpdate.category = updatedData.category;
+      if (updatedData.description) dbUpdate.description = updatedData.description;
+      if (updatedData.image) dbUpdate.image = updatedData.image;
+
+      const { error } = await supabase
+        .from('products')
+        .update(dbUpdate)
+        .eq('id', productId);
+
+      if (error) throw error;
+      showToast('Product updated!', 'success');
+    } catch (err) {
+      console.error("Update failed", err);
+      showToast('Update failed backend', 'error');
+    }
   };
 
-  const deleteProduct = (productId) => {
+  const deleteProduct = async (productId) => {
     setProducts(products.filter(p => p.id !== productId));
-    // Also remove from wishlist if present
     setWishlist(wishlist.filter(id => id !== productId));
+
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productId);
+      if (error) throw error;
+      showToast('Product deleted permanently', 'info');
+    } catch (err) {
+      console.error("Delete failed", err);
+      showToast('Delete failed backend', 'error');
+    }
   };
 
   const reorderProducts = (newOrder) => {
     setProducts(newOrder);
+    // Note: Reordering in Supabase usually requires a separate 'order_index' column. 
+    // For now, we keep it local or implementation dependent.
   };
 
   // Analytics Functions
@@ -424,7 +432,8 @@ export const StoreProvider = ({ children }) => {
       hideToast,
       shippingData,
       detectLocation,
-      updatePincode
+      updatePincode,
+      loading
     }}>
       {children}
     </StoreContext.Provider>
