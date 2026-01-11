@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { Plus, Trash2, Edit2, GripVertical, X, Save, TrendingUp, Eye, Heart as HeartIcon, Users } from 'lucide-react';
+import { Plus, Trash2, Edit2, GripVertical, X, Save, TrendingUp, Eye, Heart as HeartIcon, Users, Globe } from 'lucide-react';
 import Footer from '../components/Footer';
 
 export const Admin = () => {
@@ -148,10 +148,25 @@ export const Admin = () => {
                         }}>
                             <Users size={32} color="var(--primary)" style={{ marginBottom: '0.5rem' }} />
                             <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)', fontFamily: 'var(--font-ui)' }}>
+                                {analytics.uniqueVisitors || 0}
+                            </div>
+                            <div style={{ fontSize: '0.9rem', color: 'var(--text-light)', fontFamily: 'var(--font-ui)' }}>
+                                Unique Visitors
+                            </div>
+                        </div>
+
+                        {/* Total Page Views */}
+                        <div className="glass-panel" style={{
+                            padding: '1.5rem',
+                            textAlign: 'center',
+                            background: 'linear-gradient(135deg, rgba(162, 217, 206, 0.1) 0%, white 100%)'
+                        }}>
+                            <Globe size={32} color="var(--secondary)" style={{ marginBottom: '0.5rem' }} />
+                            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--secondary)', fontFamily: 'var(--font-ui)' }}>
                                 {analytics.pageVisits}
                             </div>
                             <div style={{ fontSize: '0.9rem', color: 'var(--text-light)', fontFamily: 'var(--font-ui)' }}>
-                                Page Visits
+                                Total Page Views
                             </div>
                         </div>
 

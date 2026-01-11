@@ -110,11 +110,23 @@ export const StoreProvider = ({ children }) => {
   // Analytics State
   const [analytics, setAnalytics] = useState(() => {
     const saved = localStorage.getItem('analytics');
-    return saved ? JSON.parse(saved) : {
-      pageVisits: 0,
-      productViews: {}, // { productId: count }
-      wishlistStats: {} // { productId: count }
-    };
+    let parsed = saved ? JSON.parse(saved) : null;
+
+    if (!parsed) {
+      return {
+        pageVisits: 0,
+        uniqueVisitors: 0,
+        productViews: {},
+        wishlistStats: {}
+      };
+    }
+
+    // Migration for existing data
+    if (parsed.uniqueVisitors === undefined) {
+      parsed.uniqueVisitors = parsed.pageVisits > 0 ? 1 : 0;
+    }
+
+    return parsed;
   });
 
   // Cart State
@@ -263,10 +275,20 @@ export const StoreProvider = ({ children }) => {
 
   // Analytics Functions
   const trackPageVisit = () => {
-    setAnalytics(prev => ({
-      ...prev,
-      pageVisits: prev.pageVisits + 1
-    }));
+    const hasVisited = localStorage.getItem('has_visited_site');
+
+    setAnalytics(prev => {
+      const newUnique = !hasVisited ? (prev.uniqueVisitors || 0) + 1 : (prev.uniqueVisitors || 0);
+      return {
+        ...prev,
+        pageVisits: prev.pageVisits + 1,
+        uniqueVisitors: newUnique
+      };
+    });
+
+    if (!hasVisited) {
+      localStorage.setItem('has_visited_site', 'true');
+    }
   };
 
   const trackProductView = (productId) => {
