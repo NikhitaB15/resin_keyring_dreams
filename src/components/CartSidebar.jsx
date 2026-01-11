@@ -200,7 +200,7 @@ const CartSidebar = () => {
                         <button
                             onClick={() => {
                                 const message = `Hi! I'd like to order: \n` + cart.map(item => `- ${item.quantity}x ${item.title} (₹${item.price})`).join('\n') + `\n\nTotal: ₹${(cartTotal + (cartTotal > 999 ? 0 : (shippingData.pincode ? shippingData.shippingCost : 0))).toFixed(2)}`;
-                                window.open(`https://ig.me/m/your_instagram_handle?text=${encodeURIComponent(message)}`, '_blank');
+                                window.open(`https://ig.me/m/resin_keyring_dreams?text=${encodeURIComponent(message)}`, '_blank');
                             }}
                             className="btn"
                             style={{ width: '100%', justifyContent: 'center', padding: '1rem', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', border: 'none' }}
