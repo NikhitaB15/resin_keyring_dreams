@@ -13,6 +13,7 @@ const DEFAULT_PRODUCTS = [
     price: 120.00,
     originalPrice: 150.00,
     category: 'Keyrings',
+    tags: [],
     image: '/products/keyring_floral.jpg',
     description: 'Handcrafted oval keyring with delicate pink florals and gold shimmering touches.'
   },
@@ -22,6 +23,7 @@ const DEFAULT_PRODUCTS = [
     price: 150.00,
     originalPrice: 200.00,
     category: 'Earrings',
+    tags: [],
     image: '/products/earrings_blue.jpg',
     description: 'Rectangular blue resin earrings featuring real hydrangea petals.'
   },
@@ -29,7 +31,8 @@ const DEFAULT_PRODUCTS = [
     id: 3,
     title: 'Rose Petal Dangles',
     price: 100.00,
-    category: 'Valentine\'s Day',
+    category: 'Earrings',
+    tags: ['Valentine\'s Day'],
     image: '/products/earrings_rose_1.jpg',
     description: 'Circular resin drops filled with vibrant rose petals and gold foil.'
   },
@@ -38,6 +41,7 @@ const DEFAULT_PRODUCTS = [
     title: 'Emerald Leaf Squares',
     price: 115.00,
     category: 'Earrings',
+    tags: [],
     image: '/products/earrings_green.jpg',
     description: 'Square studs encapsulating fresh green leaves and glitter.'
   },
@@ -46,6 +50,7 @@ const DEFAULT_PRODUCTS = [
     title: 'Autumn Gold Drops',
     price: 140.00,
     category: 'Earrings',
+    tags: [],
     image: '/products/earrings_rose_2.jpg',
     description: 'Golden hour inspired dangles with scattered petals.'
   },
@@ -54,7 +59,8 @@ const DEFAULT_PRODUCTS = [
     title: 'Beach Keyring',
     price: 130.00,
     originalPrice: 180.00,
-    category: 'Beach',
+    category: 'Keyrings',
+    tags: ['Beach'],
     image: '/products/beach_keyring.png',
     description: 'Ocean-inspired keyring with beach elements preserved in crystal-clear resin.'
   },
@@ -63,7 +69,8 @@ const DEFAULT_PRODUCTS = [
     title: 'Pink Rose Oval Earrings',
     price: 125.00,
     originalPrice: 175.00,
-    category: 'Valentine\'s Day',
+    category: 'Earrings',
+    tags: ['Valentine\'s Day'],
     image: '/products/big_rose_earrings.jpg',
     description: 'Elegant oval-shaped earrings featuring delicate pink rose petals and floral accents.'
   },
@@ -73,6 +80,7 @@ const DEFAULT_PRODUCTS = [
     price: 135.00,
     originalPrice: 190.00,
     category: 'Keyrings',
+    tags: [],
     image: '/products/flower_keyring.jpg',
     description: 'Rectangular keyring adorned with painted pink and purple flowers on a soft background.'
   },
@@ -80,7 +88,8 @@ const DEFAULT_PRODUCTS = [
     id: 9,
     title: 'Heartbreak Studs',
     price: 110.00,
-    category: 'Valentine\'s Day',
+    category: 'Earrings',
+    tags: ['Valentine\'s Day'],
     image: '/products/heart_broken.jpg',
     description: 'Heart-shaped pink resin studs with artistic red and white patterns, perfect for Valentine\'s.'
   }
@@ -247,7 +256,7 @@ export const StoreProvider = ({ children }) => {
 
   // Actions
   const addProduct = (product) => {
-    const newProduct = { ...product, id: Date.now() };
+    const newProduct = { ...product, id: Date.now(), tags: product.tags || [] };
     setProducts([...products, newProduct]);
   };
 

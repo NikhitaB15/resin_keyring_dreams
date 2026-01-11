@@ -22,7 +22,11 @@ export const Shop = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProducts = products.filter(p => {
-        const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
+        const productTags = p.tags || [];
+        const matchesCategory = activeCategory === 'All' ||
+            p.category === activeCategory ||
+            productTags.includes(activeCategory);
+
         const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             p.description.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
