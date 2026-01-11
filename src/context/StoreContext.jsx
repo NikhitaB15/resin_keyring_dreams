@@ -59,26 +59,59 @@ export const StoreProvider = ({ children }) => {
   });
 
   // Analytics State
-  const [analytics, setAnalytics] = useState(() => {
-    const saved = localStorage.getItem('analytics');
-    let parsed = saved ? JSON.parse(saved) : null;
-
-    if (!parsed) {
-      return {
-        pageVisits: 0,
-        uniqueVisitors: 0,
-        productViews: {},
-        wishlistStats: {}
-      };
-    }
-
-    // Migration for existing data
-    if (parsed.uniqueVisitors === undefined) {
-      parsed.uniqueVisitors = parsed.pageVisits > 0 ? 1 : 0;
-    }
-
-    return parsed;
+  const [analytics, setAnalytics] = useState({
+    pageVisits: 0,
+    uniqueVisitors: 0,
+    productViews: {},
+    wishlistStats: {}
   });
+
+  // Load Analytics from Supabase
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
+  const fetchAnalytics = async () => {
+    try {
+      // 1. Fetch Global Stats (Visits, Unique Visitors)
+      const { data: globalStats, error: globalError } = await supabase
+        .from('site_stats')
+        .select('*');
+
+      if (globalError) throw globalError;
+
+      // Convert array to object
+      const statsMap = {};
+      globalStats.forEach(item => {
+        statsMap[item.key] = item.value;
+      });
+
+      // 2. Fetch Product Views & Wishlists
+      const { data: productStats, error: productError } = await supabase
+        .from('product_stats')
+        .select('*');
+
+      if (productError) throw productError;
+
+      const viewsMap = {};
+      const wishlistMap = {};
+
+      productStats.forEach(item => {
+        if (item.view_count > 0) viewsMap[item.product_id] = item.view_count;
+        if (item.wishlist_count > 0) wishlistMap[item.product_id] = item.wishlist_count;
+      });
+
+      setAnalytics({
+        pageVisits: statsMap['page_visits'] || 0,
+        uniqueVisitors: statsMap['unique_visitors'] || 0,
+        productViews: viewsMap,
+        wishlistStats: wishlistMap
+      });
+
+    } catch (err) {
+      console.error("Error loading analytics:", err);
+    }
+  };
 
   // Cart State
   const [cart, setCart] = useState(() => {
@@ -192,9 +225,7 @@ export const StoreProvider = ({ children }) => {
     localStorage.setItem('isAdmin', isAdmin);
   }, [isAdmin]);
 
-  useEffect(() => {
-    localStorage.setItem('analytics', JSON.stringify(analytics));
-  }, [analytics]);
+
 
   // Actions
   const addProduct = async (product) => {
@@ -291,24 +322,34 @@ export const StoreProvider = ({ children }) => {
   };
 
   // Analytics Functions
-  const trackPageVisit = () => {
-    const hasVisited = localStorage.getItem('has_visited_site');
+  const trackPageVisit = async () => {
+    // Optimistic Update
+    setAnalytics(prev => ({ ...prev, pageVisits: prev.pageVisits + 1 }));
 
-    setAnalytics(prev => {
-      const newUnique = !hasVisited ? (prev.uniqueVisitors || 0) + 1 : (prev.uniqueVisitors || 0);
-      return {
-        ...prev,
-        pageVisits: prev.pageVisits + 1,
-        uniqueVisitors: newUnique
-      };
-    });
+    const hasVisited = localStorage.getItem('has_visited_site_v2'); // New key to force unique count reset/check
+    let isNewVisitor = false;
 
     if (!hasVisited) {
-      localStorage.setItem('has_visited_site', 'true');
+      localStorage.setItem('has_visited_site_v2', 'true');
+      isNewVisitor = true;
+      setAnalytics(prev => ({ ...prev, uniqueVisitors: prev.uniqueVisitors + 1 }));
+    }
+
+    try {
+      // We use an RPC function ideally, but since we can't create one easily without SQL access UI,
+      // we'll use a somewhat simplified approach (Upsert is cleaner but let's try direct updates).
+      // For simplicity and robustness without RPC, we might need a stored procedure.
+      // Assuming user will run the SQL provided below:
+
+      await supabase.rpc('increment_page_view', { is_unique: isNewVisitor });
+
+    } catch (err) {
+      console.error("Failed to track page visit", err);
     }
   };
 
-  const trackProductView = (productId) => {
+  const trackProductView = async (productId) => {
+    // Optimistic
     setAnalytics(prev => ({
       ...prev,
       productViews: {
@@ -316,6 +357,12 @@ export const StoreProvider = ({ children }) => {
         [productId]: (prev.productViews[productId] || 0) + 1
       }
     }));
+
+    try {
+      await supabase.rpc('increment_product_view', { x_product_id: productId });
+    } catch (err) {
+      console.error("Failed to track product view", err);
+    }
   };
 
   const getAnalytics = () => {
@@ -341,7 +388,7 @@ export const StoreProvider = ({ children }) => {
     localStorage.removeItem('adminAuth');
   };
 
-  const toggleWishlist = (productId) => {
+  const toggleWishlist = async (productId) => {
     const isAdding = !wishlist.includes(productId);
 
     setWishlist(prev =>
@@ -352,6 +399,7 @@ export const StoreProvider = ({ children }) => {
 
     // Track wishlist stats
     if (isAdding) {
+      // Optimistic
       setAnalytics(prev => ({
         ...prev,
         wishlistStats: {
@@ -359,6 +407,12 @@ export const StoreProvider = ({ children }) => {
           [productId]: (prev.wishlistStats[productId] || 0) + 1
         }
       }));
+
+      try {
+        await supabase.rpc('increment_wishlist', { x_product_id: productId });
+      } catch (err) {
+        console.error("Failed to track wishlist", err);
+      }
     }
   };
 
