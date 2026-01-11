@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
@@ -7,7 +8,28 @@ import { Search } from 'lucide-react';
 
 export const Shop = () => {
     const { products, categories } = useStore();
-    const [activeCategory, setActiveCategory] = useState('All');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
+
+    // Update URL when category changes
+    useEffect(() => {
+        if (activeCategory === 'All') {
+            searchParams.delete('category');
+        } else {
+            searchParams.set('category', activeCategory);
+        }
+        setSearchParams(searchParams);
+    }, [activeCategory, setSearchParams]);
+
+    // Update state when URL changes (e.g. back button)
+    useEffect(() => {
+        const category = searchParams.get('category');
+        if (category && category !== activeCategory) {
+            setActiveCategory(category);
+        } else if (!category && activeCategory !== 'All') {
+            setActiveCategory('All');
+        }
+    }, [searchParams]);
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProducts = products.filter(p => {
@@ -70,7 +92,7 @@ export const Shop = () => {
 
                 {filteredProducts.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '4rem', opacity: 0.6 }}>
-                        <h3>No products found matching your criteria.</h3>
+                        <h3>Coming Soon...</h3>
                     </div>
                 )}
             </div>

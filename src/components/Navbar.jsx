@@ -66,6 +66,22 @@ const Navbar = () => {
                     position: 'relative',
                     transition: 'color 0.3s ease'
                 }}>Shop</Link>
+                <Link to="/shop?category=Valentine's Day" className={isActive('/shop?category=Valentine\'s Day')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    letterSpacing: '0.5px',
+                    position: 'relative',
+                    transition: 'color 0.3s ease'
+                }}>Valentine's Day</Link>
+                <Link to="/shop?category=Beach" className={isActive('/shop?category=Beach')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    letterSpacing: '0.5px',
+                    position: 'relative',
+                    transition: 'color 0.3s ease'
+                }}>Beach</Link>
 
                 {isAdmin && (
                     <Link to="/admin" className={isActive('/admin')} style={{
@@ -159,6 +175,18 @@ const Navbar = () => {
                     fontSize: '1.1rem',
                     letterSpacing: '0.5px'
                 }}>Shop</Link>
+                <Link to="/shop?category=Valentine's Day" className={isActive('/shop?category=Valentine\'s Day')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.5px'
+                }}>Valentine's Day</Link>
+                <Link to="/shop?category=Beach" className={isActive('/shop?category=Beach')} style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.5px'
+                }}>Beach</Link>
                 {isAdmin && (
                     <Link to="/admin" className={isActive('/admin')} style={{
                         fontFamily: 'var(--font-ui)',

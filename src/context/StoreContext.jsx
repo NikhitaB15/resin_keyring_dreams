@@ -4,7 +4,7 @@ const StoreContext = createContext();
 
 export const useStore = () => useContext(StoreContext);
 
-const DEFAULT_CATEGORIES = ['Keyrings', 'Earrings', 'Necklaces', 'Sets'];
+const DEFAULT_CATEGORIES = ['Keyrings', 'Earrings', 'Necklaces', 'Sets', 'Valentine\'s Day', 'Beach'];
 
 const DEFAULT_PRODUCTS = [
   {
@@ -29,7 +29,7 @@ const DEFAULT_PRODUCTS = [
     id: 3,
     title: 'Rose Petal Dangles',
     price: 100.00,
-    category: 'Earrings',
+    category: 'Valentine\'s Day',
     image: '/products/earrings_rose_1.jpg',
     description: 'Circular resin drops filled with vibrant rose petals and gold foil.'
   },
@@ -54,7 +54,7 @@ const DEFAULT_PRODUCTS = [
     title: 'Beach Keyring',
     price: 130.00,
     originalPrice: 180.00,
-    category: 'Keyrings',
+    category: 'Beach',
     image: '/products/beach_keyring.png',
     description: 'Ocean-inspired keyring with beach elements preserved in crystal-clear resin.'
   },
@@ -63,7 +63,7 @@ const DEFAULT_PRODUCTS = [
     title: 'Pink Rose Oval Earrings',
     price: 125.00,
     originalPrice: 175.00,
-    category: 'Earrings',
+    category: 'Valentine\'s Day',
     image: '/products/big_rose_earrings.jpg',
     description: 'Elegant oval-shaped earrings featuring delicate pink rose petals and floral accents.'
   },
@@ -80,7 +80,7 @@ const DEFAULT_PRODUCTS = [
     id: 9,
     title: 'Heartbreak Studs',
     price: 110.00,
-    category: 'Earrings',
+    category: 'Valentine\'s Day',
     image: '/products/heart_broken.jpg',
     description: 'Heart-shaped pink resin studs with artistic red and white patterns, perfect for Valentine\'s.'
   }
