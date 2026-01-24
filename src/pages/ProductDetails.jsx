@@ -14,8 +14,9 @@ export const ProductDetails = () => {
     const product = products.find(p => p.id === parseInt(id) || p.id === id);
     const isWishlisted = product ? wishlist.includes(product.id) : false;
 
-    // Track product view
+    // Track product view & Scroll to top
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (product) {
             trackProductView(product.id);
         }
