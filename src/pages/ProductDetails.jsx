@@ -67,10 +67,35 @@ export const ProductDetails = () => {
                         {product.description}
                     </p>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        <button onClick={handleAddToCart} className="btn" style={{ flex: 1, fontSize: '1.1rem', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                        <button onClick={handleAddToCart} className="btn" style={{ flex: 1, minWidth: '160px', fontSize: '1.1rem', justifyContent: 'center' }}>
                             <ShoppingBag size={20} style={{ marginRight: '0.5rem' }} /> Add to Cart
                         </button>
+
+                        <button
+                            onClick={() => {
+                                const message = `Hi! I want to order the "${product.title}" for ₹${product.price}. Is it available?`;
+                                navigator.clipboard.writeText(message);
+                                // Fallback/Universal link
+                                window.open(`https://ig.me/m/resin_keyring_dreams`, '_blank');
+                                // We use a timeout to let the window open event fire first if needed, 
+                                // but mainly we rely on the user pasting since IG pre-fill is unreliable.
+                                alert('Message copied to clipboard! Paste it in the chat. 📋');
+                            }}
+                            className="btn"
+                            style={{
+                                flex: 1,
+                                minWidth: '160px',
+                                fontSize: '1.1rem',
+                                justifyContent: 'center',
+                                background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                                border: 'none',
+                                color: 'white'
+                            }}
+                        >
+                            <span style={{ marginRight: '0.5rem' }}>📸</span> Order on Insta
+                        </button>
+
                         <button
                             onClick={handleWishlist}
                             className="btn btn-secondary"
