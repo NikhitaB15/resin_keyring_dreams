@@ -73,45 +73,6 @@ export const ProductDetails = () => {
                         </button>
 
                         <button
-                            onClick={() => {
-                                // 1. Calculate what the cart WILL look like (Optimistic)
-                                // We do this because setState is async
-                                const existingItem = cart.find(item => item.id === product.id);
-                                let nextCart;
-                                if (existingItem) {
-                                    nextCart = cart.map(item =>
-                                        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-                                    );
-                                } else {
-                                    nextCart = [...cart, { ...product, quantity: 1 }];
-                                }
-
-                                // 2. Generate Message
-                                const message = generateOrderMessage(nextCart);
-                                navigator.clipboard.writeText(message);
-
-                                // 3. Update Real Cart State (Silently, don't open sidebar)
-                                addToCart(product, false);
-
-                                // 4. Go to Insta
-                                window.open(`https://ig.me/m/resin_keyring_dreams`, '_blank');
-                                showToast('Order details copied! Paste in chat.', 'success');
-                            }}
-                            className="btn"
-                            style={{
-                                flex: 1,
-                                minWidth: '160px',
-                                fontSize: '1.1rem',
-                                justifyContent: 'center',
-                                background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                border: 'none',
-                                color: 'white'
-                            }}
-                        >
-                            <span style={{ marginRight: '0.5rem' }}>📸</span> Order on Insta
-                        </button>
-
-                        <button
                             onClick={handleWishlist}
                             className="btn btn-secondary"
                             style={{ width: '60px', justifyContent: 'center', padding: '0', background: isWishlisted ? '#ffebeb' : 'transparent', borderColor: isWishlisted ? '#ff6b6b' : 'var(--text)' }}

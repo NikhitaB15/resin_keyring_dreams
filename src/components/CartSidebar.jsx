@@ -202,7 +202,6 @@ const CartSidebar = () => {
                                 const message = generateOrderMessage();
                                 navigator.clipboard.writeText(message);
                                 window.open(`https://ig.me/m/resin_keyring_dreams`, '_blank');
-                                showToast('Order details copied to clipboard! Paste in chat.', 'success');
                             }}
                             className="btn"
                             style={{ width: '100%', justifyContent: 'center', padding: '1rem', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', border: 'none' }}
