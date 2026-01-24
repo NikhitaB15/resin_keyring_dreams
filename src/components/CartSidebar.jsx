@@ -199,7 +199,7 @@ const CartSidebar = () => {
                         </p>
                         <button
                             onClick={() => {
-                                const message = `Hi! I'd like to order: \n` + cart.map(item => `- ${item.quantity}x ${item.title} (₹${item.price})`).join('\n') + `\n\nTotal: ₹${(cartTotal + (cartTotal > 999 ? 0 : (shippingData.pincode ? shippingData.shippingCost : 0))).toFixed(2)}`;
+                                const message = generateOrderMessage();
                                 navigator.clipboard.writeText(message);
                                 window.open(`https://ig.me/m/resin_keyring_dreams`, '_blank');
                                 showToast('Order details copied to clipboard! Paste in chat.', 'success');

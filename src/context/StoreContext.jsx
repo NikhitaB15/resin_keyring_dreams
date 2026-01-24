@@ -421,7 +421,7 @@ export const StoreProvider = ({ children }) => {
   };
 
   // Cart Actions
-  const addToCart = (product) => {
+  const addToCart = (product, openSidebar = true) => {
     setCart(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
@@ -433,7 +433,20 @@ export const StoreProvider = ({ children }) => {
       showToast('Added to Cart', 'success');
       return [...prev, { ...product, quantity: 1 }];
     });
-    setIsCartOpen(true);
+    if (openSidebar) {
+      setIsCartOpen(true);
+    }
+  };
+
+  const generateOrderMessage = (currentCart = cart) => {
+    const total = currentCart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const shipping = shippingData.pincode ? shippingData.shippingCost : 0;
+    const finalTotal = total + (total > 999 ? 0 : shipping);
+
+    return `Hi! I'd like to order: \n` +
+      currentCart.map(item => `- ${item.quantity}x ${item.title} (₹${item.price})`).join('\n') +
+      `\n\nTotal: ₹${finalTotal.toFixed(2)}` +
+      (shippingData.pincode ? ` (Shipping to ${shippingData.pincode})` : '');
   };
 
   const removeFromCart = (productId) => {
@@ -485,7 +498,10 @@ export const StoreProvider = ({ children }) => {
       shippingData,
       detectLocation,
       updatePincode,
-      loading
+      detectLocation,
+      updatePincode,
+      loading,
+      generateOrderMessage
     }}>
       {children}
     </StoreContext.Provider>

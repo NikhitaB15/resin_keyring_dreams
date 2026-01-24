@@ -9,7 +9,7 @@ import ImageWithLoader from '../components/ImageWithLoader';
 
 export const ProductDetails = () => {
     const { id } = useParams();
-    const { products, toggleWishlist, wishlist, trackProductView, addToCart } = useStore();
+    const { products, toggleWishlist, wishlist, trackProductView, addToCart, cart, generateOrderMessage, showToast } = useStore();
 
     const product = products.find(p => p.id === parseInt(id) || p.id === id);
     const isWishlisted = product ? wishlist.includes(product.id) : false;
@@ -74,13 +74,28 @@ export const ProductDetails = () => {
 
                         <button
                             onClick={() => {
-                                const message = `Hi! I want to order the "${product.title}" for ₹${product.price}. Is it available?`;
+                                // 1. Calculate what the cart WILL look like (Optimistic)
+                                // We do this because setState is async
+                                const existingItem = cart.find(item => item.id === product.id);
+                                let nextCart;
+                                if (existingItem) {
+                                    nextCart = cart.map(item =>
+                                        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                                    );
+                                } else {
+                                    nextCart = [...cart, { ...product, quantity: 1 }];
+                                }
+
+                                // 2. Generate Message
+                                const message = generateOrderMessage(nextCart);
                                 navigator.clipboard.writeText(message);
-                                // Fallback/Universal link
+
+                                // 3. Update Real Cart State (Silently, don't open sidebar)
+                                addToCart(product, false);
+
+                                // 4. Go to Insta
                                 window.open(`https://ig.me/m/resin_keyring_dreams`, '_blank');
-                                // We use a timeout to let the window open event fire first if needed, 
-                                // but mainly we rely on the user pasting since IG pre-fill is unreliable.
-                                alert('Message copied to clipboard! Paste it in the chat. 📋');
+                                showToast('Order details copied! Paste in chat.', 'success');
                             }}
                             className="btn"
                             style={{
