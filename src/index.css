@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
 :root {
   --primary: #E7A1B0;
   /* Soft Rose / Dusty Pink - buttons, highlights */
@@ -26,7 +28,6 @@
   --font-ui: 'Montserrat', sans-serif;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
 body {
   background-color: var(--bg);
@@ -243,6 +244,21 @@ nav a:not(.btn):not(.btn-icon):hover {
     transform: translateY(-10px);
   }
 }
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(246, 193, 204, 0.5);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(246, 193, 204, 0.7);
+  }
+}
+
 
 /* Smooth scroll */
 html {

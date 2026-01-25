@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
-import { ArrowRight, Heart, Sparkles } from 'lucide-react';
+import { Heart, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import PersonalizationSection from '../components/PersonalizationSection';
+import HeroCarousel from '../components/HeroCarousel';
 import Footer from '../components/Footer';
 
 export const Home = () => {
@@ -23,58 +23,8 @@ export const Home = () => {
 
     return (
         <div>
-            {/* Hero */}
-            <div style={{
-                minHeight: '90vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                position: 'relative',
-                padding: '2rem',
-                background: 'radial-gradient(circle at 30% 50%, rgba(246, 193, 204, 0.15) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(201, 162, 77, 0.1) 0%, transparent 50%)'
-            }}>
-                <div style={{
-                    maxWidth: '900px',
-                    animation: 'fadeIn 1.2s ease-out',
-                    padding: '0 2rem'
-                }}>
-                    <h1 style={{
-                        fontFamily: 'var(--font-accent)',
-                        fontSize: 'clamp(3rem, 8vw, 5rem)',
-                        marginBottom: '1.5rem',
-                        color: 'var(--primary)',
-                        lineHeight: 1.2,
-                        animation: 'slideInFromLeft 0.8s ease-out'
-                    }}>
-                        Resin Dreams
-                    </h1>
-                    <p style={{
-                        fontSize: 'clamp(1rem, 2vw, 1.3rem)',
-                        color: 'var(--text)',
-                        marginBottom: '3rem',
-                        lineHeight: '1.8',
-                        fontFamily: 'var(--font-main)',
-                        maxWidth: '600px',
-                        margin: '0 auto 3rem',
-                        animation: 'slideInFromRight 0.8s ease-out 0.2s backwards'
-                    }}>
-                        Handcrafted resin keyrings, earrings, and jewellery. <br />
-                        Each piece captures nature's beauty in crystal-clear perfection.
-                    </p>
-                    <Link to="/shop" className="btn" style={{
-                        fontSize: '1rem',
-                        padding: '1.2rem 3rem',
-                        animation: 'fadeIn 1s ease-out 0.4s backwards',
-                        display: 'inline-flex'
-                    }}>
-                        Explore Collection <ArrowRight size={20} />
-                    </Link>
-                </div>
-            </div>
-
-            {/* Personalization Section */}
-            <PersonalizationSection />
+            {/* Hero Carousel - Brand & Personalization */}
+            <HeroCarousel />
 
             {/* Valentine's Special Section */}
             <section style={{
