@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { ArrowRight, Heart, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import PersonalizationSection from '../components/PersonalizationSection';
 import Footer from '../components/Footer';
 
 export const Home = () => {
@@ -71,6 +72,9 @@ export const Home = () => {
                     </Link>
                 </div>
             </div>
+
+            {/* Personalization Section */}
+            <PersonalizationSection />
 
             {/* Valentine's Special Section */}
             <section style={{
