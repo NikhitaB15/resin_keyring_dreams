@@ -65,15 +65,20 @@ const HeroCarousel = () => {
 
     return (
         <div style={{
-            minHeight: '90vh',
+            margin: '1.5rem auto',
+            maxWidth: '1400px',
+            width: 'calc(100% - 2rem)',
+            minHeight: '85vh',
             position: 'relative',
             overflow: 'hidden',
+            borderRadius: '32px',
             background: slide.background,
             backgroundImage: slide.backgroundImage ? `url(${slide.backgroundImage})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            transition: 'all 0.8s ease'
+            transition: 'all 0.8s ease',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)'
         }}>
             {/* Background overlay for text readability */}
             {slide.backgroundImage && (
@@ -88,7 +93,7 @@ const HeroCarousel = () => {
                 }} />
             )}
             <div style={{
-                minHeight: '90vh',
+                minHeight: '85vh',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
