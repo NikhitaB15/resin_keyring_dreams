@@ -30,15 +30,32 @@ export const StoreProvider = ({ children }) => {
 
       if (data && data.length > 0) {
         setProducts(data);
+
+        // Extract unique categories and tags
+        const allCategories = new Set(DEFAULT_CATEGORIES);
+
+        data.forEach(p => {
+          if (p.category) allCategories.add(p.category);
+
+          // Parse tags
+          let tags = [];
+          if (Array.isArray(p.tags)) {
+            tags = p.tags;
+          } else if (typeof p.tags === 'string') {
+            const cleanTags = p.tags.replace(/[{}"\[\]]/g, '');
+            tags = cleanTags.split(',').map(t => t.trim()).filter(Boolean);
+          }
+          tags.forEach(t => allCategories.add(t));
+        });
+
+        setCategories(Array.from(allCategories));
+
       } else {
-        // If DB is empty, maybe we want to use defaults? 
-        // For now, let's keep it empty or you can seed it manually.
         setProducts([]);
+        // Optionally keep default categories if no products found
       }
     } catch (error) {
       console.error('Error fetching products:', error.message);
-      // Fallback to localStorage if Supabase fails? 
-      // For now, let's just log it.
     } finally {
       setLoading(false);
     }
