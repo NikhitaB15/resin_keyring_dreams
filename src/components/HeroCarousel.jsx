@@ -72,11 +72,9 @@ const HeroCarousel = () => {
             position: 'relative',
             overflow: 'hidden',
             borderRadius: '32px',
-            background: slide.background,
-            backgroundImage: slide.backgroundImage ? `url(${slide.backgroundImage})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
+            background: slide.backgroundImage
+                ? `url(${slide.backgroundImage}) center center / cover no-repeat`
+                : slide.background,
             transition: 'all 0.8s ease',
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)'
         }}>
@@ -173,7 +171,8 @@ const HeroCarousel = () => {
                             {/* Image Side */}
                             <div style={{
                                 order: window.innerWidth < 768 ? 2 : 1,
-                                animation: 'slideInFromLeft 0.8s ease-out'
+                                animation: 'slideInFromLeft 0.8s ease-out',
+                                position: 'relative' // Anchor for price badge
                             }}>
                                 <div style={{
                                     background: 'white',

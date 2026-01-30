@@ -13,6 +13,6 @@ VALUES
   ('Red Flower Oval Earrings', 150.00, NULL, 'Earrings', '/products/red_flower_ovals.jpeg', 'Elegant transparent oval drops encapsulating vibrant real red blooms, preserving nature''s beauty in a timeless accessory.'),
   ('Big Butterfly Keyring', 150.00, NULL, 'Keyrings', '/products/butterfly_big.jpeg', 'A magnificent, oversized butterfly statement piece featuring a kaleidoscope of vibrant colors and shimmering resin artistry.'),
   ('Ocean Heart Keyring', 180.00, NULL, 'Keyrings', '/products/ocean_big_hrt.jpeg', 'Deep blue heart-shaped keepsake swirling with oceanic hues and aquatic sparkles, capturing the mysterious essence of the sea.'),
-  ('Pink Beach Keyring', 130.00, 180.00, 'Keyrings', '/products/beach_pink.jpeg', 'Dreamy soft pink keychain infused with real sand particles and delicate seashells, evoking the serenity of a sunset beach.'),
+  ('Pink Beach Earrings', 130.00, 180.00, 'Earrings', '/products/beach_pink.jpeg', 'Dreamy soft pink keychain infused with real sand particles and delicate seashells, evoking the serenity of a sunset beach.'),
   ('Black Mystery Keyring', 145.00, NULL, 'Keyrings', '/products/black_keychain.jpeg', 'Sophisticated black resin keyring with mysterious depths and subtle shimmer, perfect for those who appreciate elegant minimalism.'),
-  ('Sunset Butterfly Keyring', 160.00, NULL, 'Keyrings', '/products/sunset_butterfly.jpeg', 'Enchanting butterfly design capturing the warm hues of a golden sunset, featuring gradient colors and delicate wing details in premium resin.');
+  ('Sunset Butterfly Earrings', 160.00, NULL, 'Earrings', '/products/sunset_butterfly.jpeg', 'Enchanting butterfly design capturing the warm hues of a golden sunset, featuring gradient colors and delicate wing details in premium resin.');
