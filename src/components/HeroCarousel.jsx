@@ -21,6 +21,21 @@ const HeroCarousel = () => {
         },
         {
             id: 2,
+            type: 'personalization',
+            title: 'Personalized Photo Keyrings',
+            subtitle: 'Make It Personal 📸',
+            description: 'Carry your cherished memories wherever you go! Custom resin keyrings with your Instax photos preserved forever.',
+            price: '₹300',
+            priceNote: 'Keyring + Instax Photo Frame',
+            cta: 'Contact Us on Instagram',
+            ctaLink: 'https://www.instagram.com/resin_keyring_dreams/',
+            ctaIcon: <Camera size={20} />,
+            ctaExternal: true,
+            image: '/products/personalization_designs.jpeg',
+            background: 'linear-gradient(135deg, rgba(201, 162, 77, 0.08) 0%, rgba(246, 193, 204, 0.12) 100%)'
+        },
+        {
+            id: 3,
             type: 'brand',
             title: 'Oxidised Elegance',
             subtitle: 'New Collection Arrivals ✨',
@@ -30,6 +45,21 @@ const HeroCarousel = () => {
             ctaIcon: <ArrowRight size={20} />,
             backgroundImage: '/products/blue_red_oxi.jpg',
             background: 'radial-gradient(circle at 20% 80%, rgba(160, 160, 160, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(246, 193, 204, 0.15) 0%, transparent 50%)'
+        },
+        {
+            id: 4,
+            type: 'personalization',
+            title: 'Personalized Resin Frames',
+            subtitle: 'Cherished Memories 🖼️',
+            description: 'Elegantly preserve your memories with custom resin frames featuring premium finishes and gorgeous floral additions.',
+            price: 'Starting ₹860',
+            priceNote: 'Custom Shape & Floral Decor',
+            cta: 'Contact Us on Instagram',
+            ctaLink: 'https://www.instagram.com/resin_keyring_dreams/',
+            ctaIcon: <Camera size={20} />,
+            ctaExternal: true,
+            image: '/products/photo_frame_personalized.jpg',
+            background: 'linear-gradient(135deg, rgba(246, 193, 204, 0.08) 0%, rgba(201, 162, 77, 0.12) 100%)'
         }
     ];
 
