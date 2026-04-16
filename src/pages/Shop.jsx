@@ -58,11 +58,16 @@ export const Shop = () => {
             productTags = cleanTags.split(',').map(t => t.trim()).filter(Boolean);
         }
 
+        // Normalize for case-insensitive comparison
+        const normalizedActiveCategory = activeCategory.toLowerCase();
+        const normalizedProductCategory = (p.category || '').toLowerCase();
+        const normalizedTags = productTags.map(t => t.toLowerCase());
+
         console.log(`Product: ${p.title}, Category: ${p.category}, Tags:`, productTags); // Debugging
 
         const matchesCategory = activeCategory === 'All' ||
-            p.category === activeCategory ||
-            productTags.includes(activeCategory);
+            normalizedProductCategory === normalizedActiveCategory ||
+            normalizedTags.includes(normalizedActiveCategory);
 
         const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             p.description.toLowerCase().includes(searchQuery.toLowerCase());

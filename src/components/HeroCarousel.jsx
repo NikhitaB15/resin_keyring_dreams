@@ -33,6 +33,17 @@ const HeroCarousel = () => {
             ctaExternal: true,
             image: '/products/personalization_designs.jpeg',
             background: 'linear-gradient(135deg, rgba(201, 162, 77, 0.08) 0%, rgba(246, 193, 204, 0.12) 100%)'
+        },
+        {
+            id: 3,
+            type: 'brand',
+            title: 'Oxidised Elegance',
+            subtitle: 'New Collection Arrivals ✨',
+            description: 'Step into timeless beauty with our artisanal oxidised jewellery collection, featuring intricately detailed earrings for every style.',
+            cta: 'Shop Oxidised Earrings',
+            ctaLink: "/shop?category=Oxidised Earrings",
+            ctaIcon: <ArrowRight size={20} />,
+            background: 'radial-gradient(circle at 20% 80%, rgba(160, 160, 160, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(246, 193, 204, 0.15) 0%, transparent 50%)'
         }
     ];
 
