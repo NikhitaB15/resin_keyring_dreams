@@ -6,7 +6,7 @@ const StoreContext = createContext();
 
 export const useStore = () => useContext(StoreContext);
 
-const DEFAULT_CATEGORIES = ['Keyrings', 'Earrings', 'Necklaces', 'Sets', 'Valentine\'s Day', 'Beach', 'Oxidised Earrings', 'Pendants'];
+const DEFAULT_CATEGORIES = ['Keyrings', 'Earrings', 'Necklaces', 'Sets', 'Valentine\'s Day', 'Beach', 'Oxidised Earrings', 'Pendants', 'Statement Earrings', 'Personalized'];
 
 export const StoreProvider = ({ children }) => {
   // Products now come from Supabase or default empty array initially
